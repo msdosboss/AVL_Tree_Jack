@@ -6,6 +6,102 @@ class BinaryTree {
         return this;
     }
 
+    method bool remove(int value){
+        if(~(root = null)){
+            return removeHelper(root, value);
+        }
+        return false;
+    }
+
+    method bool removeHelper(BinaryNode current, int value){
+        var BinaryNode left_node, right_node;
+        if(current.getData() = value){
+            do removeNode(current);
+            return true;
+        }
+        let left_node = current.getLeft();
+        let right_node = current.getRight();
+
+        if(current.getData() < value){
+            if(~(right_node = null)){
+                return removeHelper(right_node, value);
+            }
+        }
+        else{
+            if(~(left_node = null)){
+                return removeHelper(left_node, value);
+            }
+        }
+        
+        return false;
+    }
+
+    method void removeNode(BinaryNode node_to_remove){
+        var BinaryNode successor_node, parent; 
+        var bool is_left_of_parent;
+
+        let parent = node_to_remove.getParent();
+
+        // Internal node with 2 children
+        if((~(node_to_remove.getLeft() = null)) & (~(node_to_remove.getRight() = null))){
+            let successor_node = node_to_remove.getRight();
+            while(~(successor_node.getLeft() = null)){
+                let successor_node = successor_node.getLeft();
+            }
+            do node_to_remove.setData(successor_node.getData());
+
+            do removeNode(successor_node);
+        }
+        else{
+            let successor_node = node_to_remove;
+            // Root node with 1 or 0 children
+            if(node_to_remove = root){
+                if(~(root.getLeft() = null)){
+                    let root = root.getLeft();
+                }
+                else{
+                    let root = root.getRight();
+                }
+                if(~(root = null)){
+                    do root.setParent(null);
+                }
+            }
+            else{
+                let is_left_of_parent = (parent.getData() > node_to_remove.getData()); 
+                // Internal node with left_child only
+                if(~(node_to_remove.getLeft() = null)){
+                    if(is_left_of_parent){
+                        do parent.setLeft(node_to_remove.getLeft());
+                    }
+                    else{
+                        do parent.setRight(node_to_remove.getLeft());
+                    }
+                }
+                // Internal with right_child or leaf
+                else{
+                    if(is_left_of_parent){
+                        do parent.setLeft(node_to_remove.getRight());
+                    }
+                    else{
+                        do parent.setRight(node_to_remove.getRight());
+                    }
+
+                }
+            }
+            do successor_node.dispose();
+        }
+
+        // Rebalancing up the parent chain
+        let successor_node = parent;
+        while(~(successor_node = null)){
+            do rebalnce(successor_node);
+            let successor_node = successor_node.getParent();
+        }
+
+        return;
+        
+    }
+
     method void insert(int value){
         if (~(root = null)){
             do insertHelper(root, value);
@@ -15,6 +111,7 @@ class BinaryTree {
         }
         return;
     }
+
     method void insertHelper(BinaryNode current, int value){
         var BinaryNode left_node, right_node, new_node;
         var int current_value, left_height, right_height;
@@ -51,6 +148,13 @@ class BinaryTree {
 
         do current.updateHeight();
 
+        do rebalnce(current);
+
+        return;
+    }
+
+    method void rebalnce(BinaryNode current){
+        var BinaryNode left_node, right_node;
         let left_node = current.getLeft();
         let right_node = current.getRight();
 
@@ -80,6 +184,7 @@ class BinaryTree {
         }
 
         return;
+
     }
 
     method void LLShift(BinaryNode current){

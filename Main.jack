@@ -2,7 +2,7 @@ class Main {
     function void main() {
         var BinaryTree tree;
         var int i;
-        let i = 15;
+        let i = 16;
         do Output.printString("Hello Orca!");
         do Output.println();
         let tree = BinaryTree.new(null);
@@ -21,6 +21,10 @@ class Main {
             do tree.insert(i);
             let i = i - 1;
         }
+
+        do tree.remove(5);
+        do tree.remove(7);
+        do tree.remove(3);
 
         /*do tree.insert(1);
         do tree.insert(2);
