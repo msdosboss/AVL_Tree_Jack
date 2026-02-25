@@ -95,6 +95,7 @@ class BinaryTree {
         let successor_node = parent;
         while(~(successor_node = null)){
             do rebalnce(successor_node);
+            do successor_node.updateHeight();
             let successor_node = successor_node.getParent();
         }
 

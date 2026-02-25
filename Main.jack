@@ -24,7 +24,10 @@ class Main {
 
         do tree.remove(5);
         do tree.remove(7);
-        do tree.remove(3);
+        do Output.printInt(tree.remove(3));
+        do Output.println();
+        do Output.printInt(tree.remove(3));
+        do Output.println();
 
         /*do tree.insert(1);
         do tree.insert(2);
